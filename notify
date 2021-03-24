@@ -1,0 +1,57 @@
+AWS SNS Mobile push
+	Create a Topic for Mobile Push Messages
+	Add Subscriber to the Topic. Each subscriber would be a device/app endpoint
+	
+	Send Mobile Push messages to Topic
+	All subscribers to the Topic receive the message on the device
+	
+	Send Mobile Push message to specific app/device endpoint
+	App/Device endpoint receives the message on the app/device
+	
+
+AWS SNS Web hooks
+	Create a Topic for Web hooks
+	Add Subscriber to the Topic. Each subscriber would be a Http/s endpoint
+	
+	Send  messages to Topic
+	All subscribers to the Topic receive the message on the http/s endpoint
+	
+	Send message to specific http/s endpoint
+	http/s endpoint receives the message 
+	
+
+
+	
+
+	
+In-browser App Notifications/icon notifications(SSE)
+====================================================
+
+https://dev.to/4shub/building-with-server-sent-events-13j
+https://www.digitalocean.com/community/tutorials/nodejs-server-sent-events-build-realtime-app
+
+Can use AWS SNS Topic with channel as HTTP Endpoint
+
+	
+	Server Sent Events (SSE)
+	Register the app on a specific endpoint
+	store the subscription in the data store
+	
+	Send messages to all the connected client/users
+	Fetch the subscription(s) from the data store
+	Send a message to each of the subscription 
+	
+
+		
+
+Web Push
+========
+https://felixgerschau.com/web-push-notifications-tutorial/	
+https://tests.peter.sh/notification-generator/#image=1;;icon=1;;vibrate=1;;timestamp=1
+https://medium.com/swlh/subscribing-to-and-creating-web-push-notifications-using-angular-8-node-and-a-nedb-database-7196d83ac427	
+
+
+
+AWS SNS P2P
+
+	
