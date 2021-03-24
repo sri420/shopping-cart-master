@@ -1,57 +1,108 @@
-AWS SNS Mobile push
-	Create a Topic for Mobile Push Messages
-	Add Subscriber to the Topic. Each subscriber would be a device/app endpoint
-	
-	Send Mobile Push messages to Topic
-	All subscribers to the Topic receive the message on the device
-	
-	Send Mobile Push message to specific app/device endpoint
-	App/Device endpoint receives the message on the app/device
-	
-
-AWS SNS Web hooks
-	Create a Topic for Web hooks
-	Add Subscriber to the Topic. Each subscriber would be a Http/s endpoint
-	
-	Send  messages to Topic
-	All subscribers to the Topic receive the message on the http/s endpoint
-	
-	Send message to specific http/s endpoint
-	http/s endpoint receives the message 
-	
-
-
-	
-
-	
-In-browser App Notifications/icon notifications(SSE)
-====================================================
-
-https://dev.to/4shub/building-with-server-sent-events-13j
-https://www.digitalocean.com/community/tutorials/nodejs-server-sent-events-build-realtime-app
-
-Can use AWS SNS Topic with channel as HTTP Endpoint
-
-	
-	Server Sent Events (SSE)
-	Register the app on a specific endpoint
-	store the subscription in the data store
-	
-	Send messages to all the connected client/users
-	Fetch the subscription(s) from the data store
-	Send a message to each of the subscription 
-	
-
-		
+Web Hooks
+	Create a SNS topic for Web hooks
+	Create a AWS Lambda function which fetches the webhook URL for passed webhook ID
+	and using webhook URL and received payload from the message , sends message accordingly
+	Subscribe the SNS topic to created AWS Lambda function
+	Store the webhook endpoints in a data store, webhook id, webhook url
+	Publish a message to SNS topic for Webhooks including a reference to the webhook endpoint along with the message
 
 Web Push
-========
-https://felixgerschau.com/web-push-notifications-tutorial/	
-https://tests.peter.sh/notification-generator/#image=1;;icon=1;;vibrate=1;;timestamp=1
-https://medium.com/swlh/subscribing-to-and-creating-web-push-notifications-using-angular-8-node-and-a-nedb-database-7196d83ac427	
+	Create a SNS topic for Web Push
+	Create a AWS Lambda function which,
+		Fetches the received message 
+		Fetches the list of Web Push url stored as subscriptions in the data store
+		Sends a message to each of the Web Push Endpoints.
+	
+	Subscribe the SNS topic to created AWS Lambda function
+	When the web app subscribes to web push, persist the subscription details on data store.
+	Publish a message to SNS topic for Web Push
+	
+	
+		
+P2P
+	Create a SNS topic for P2P
+	Create a AWS Lambda function which,
+		Fetches the received message 
+		Fetches the list of subscriptions stored in the data store
+		Sends a message to each of the P2P endpoints
+	
+	Subscribe the SNS topic to created AWS Lambda function
+	When the web app subscribes to P2P, persist the subscription details on data store.
+	Publish a message to SNS topic for P2P
+	
 
 
 
-AWS SNS P2P
 
+AWS SNS Mobile Push
+	Send messages to a Mobile Endpoint.
+	Message can appear as Message Alerts, Badge Updates, or Sound Alerts
+	
+Using one of the supported Push Notification Services	
+	ADM
+	FCM
+	APN
+	
+Push Notification Services
+	Maintain a connection with each app and associated mobile device registered to use
+	their service.
+	
+	When an app and mobile device register with PNS, a device token is returned.
+	
+	AWS SNS uses the device token, to create a mobile endpoint.
+	Mesages are sent by AWS SNS to that mobile endpoint.
+	
+	We provide the PNS credentials, to AWS SNS so that AWS SNS can use on your
+	behalf to send messages to PNS 
+	
+	2 types
+		Send direct messages to a specific mobile endpoint
+		Send messages to mobile endpoints subscribed to SNS topic
+		
+	AWS SNS communicates with PNS, so that the subscribed endpoints can receive 
+	published to the SNS Topic,
+	
+	
+		
+		
+Steps
+1.Obtain credentials and device token for the mobile platforms that we want to supported
+2.Using the credentials  , create a Platform Application Object
+3.Using the credentials  , request a device token for your mobile app/device from mobile platforms.
+4.Use the device token and Platform Application Object to create Platform Endpoint Object using SNS
+5.Use the Platform Endpoint Object , to publish message to app on mobile device
+
+
+
+Credentials for connecting to PNS
+Device Token/Registration ID received from PNS
+Mobile App Registered with the PNS
+
+Device Token/Registration ID
+	A String sent to the App by the OS the mobile device.
+	Uniquely identifies an instance of the mobile app running on a particular mobile
+	device (unique identifiers of app-devjce pair)
+	
+Amazon stores credentials along with other settings as Platform Application Resource.
+Device tokens are represented as Platform endpoints.
+Each Platform Endpoint corresponds to one specific platform application, and every platform
+endpoint can be communicated usign the credentials stored in corresponding platform application.
+
+
+
+Creating a Platform Application
+-------------------------------
+	Choose the platform
+	Provide the credentials
+	
+Registers the app with Amazon SNS , which creates a Platform Application object
+for selected platform and returns PlatformApplicationArn.
+		
+Creating a Platform Endpoint
+----------------------------
+	ARN of the Platform Application Object and
+	Device Token 
+	
+ARN of Platform Endpoint
+	
 	
